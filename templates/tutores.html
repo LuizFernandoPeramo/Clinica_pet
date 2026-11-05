@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Tutores | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<div class="heading">
+    <h1>Tutores</h1>
+    <a class="btn" href="{{ url_for('salvar_tutor') }}">Novo tutor</a>
+</div>
+<form class="filter" method="get">
+    <label for="busca">Buscar por nome
+        <input id="busca" type="search" name="q" value="{{ q }}" placeholder="Nome do tutor">
+    </label>
+    <button type="submit">Buscar</button>
+    <a class="btn secondary" href="{{ url_for('listar_tutores') }}">Limpar</a>
+</form>
+<div class="scroll">
+    <table>
+        <thead>
+            <tr><th>ID</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Ações</th></tr>
+        </thead>
+        <tbody>
+            {% for a in rows %}
+            <tr>
+                <td>{{ a.id }}</td>
+                <td>{{ a.nome }}</td>
+                <td>{{ a.email }}</td>
+                <td class="nowrap">{{ a.telefone or '—' }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('salvar_tutor', id_tutor=a.id) }}">Editar</a>
+                    <form class="inline" method="post" action="{{ url_for('excluir_tutor', id_tutor=a.id) }}" onsubmit="return confirm('Excluir este tutor?')">
+                        <button type="submit" class="link-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td class="empty" colspan="5">Nenhum tutor encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if antigo else 'Novo' }} pet | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<section class="panel narrow">
+    <h1>{{ 'Editar' if antigo else 'Novo' }} pet</h1>
+    <form method="post">
+        <label for="nome">Nome
+            <input id="nome" name="nome" value="{{ request.form.get('nome', antigo.nome if antigo else '') }}" maxlength="100" autocomplete="name" required>
+        </label>
+        <label for="especie">Espécie
+            <input id="especie" name="especie" value="{{ request.form.get('especie', antigo.especie if antigo else '') }}" maxlength="50" required>
+        </label>
+        <label for="raca">Raça
+            <input id="raca" type="text" name="raca" value="{{ request.form.get('raca', antigo.raca if antigo else '') }}" maxlength="120" required>
+        </label>
+        <label for="peso">Peso
+            <input id="peso" type="text" name="peso" value="{{ request.form.get('peso', antigo.peso or '' if antigo else '') }}" maxlength="20" placeholder="Ex.: 12kg" required>
+        </label>
+        {% set tutor_atual = request.form.get('tutor_id', (antigo.id_tutor|string) if antigo else '') %}
+        <label for="tutor_id">Tutor
+            <select id="tutor_id" name="tutor_id" required>
+                <option value="">Selecione...</option>
+                {% for t in tutores %}
+                    <option value="{{ t.id }}" {% if tutor_atual == (t.id|string) %}selected{% endif %}>{{ t.nome }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <div class="form-actions">
+            <button type="submit">Salvar</button>
+            <a class="btn secondary" href="{{ url_for('listar_pets') }}">Cancelar</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

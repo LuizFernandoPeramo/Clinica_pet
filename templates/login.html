@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Entrar | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<section class="panel login-panel">
+    <div class="login-brand">{{ config.NOME_SISTEMA }}<small>{{ config.SUBTITULO_SISTEMA }}</small></div>
+    <h1>Entrar no sistema</h1>
+    <p class="muted">Informe seu e-mail e senha para continuar.</p>
+    <form method="post">
+        <label for="email">E-mail
+            <input id="email" type="email" name="email" value="{{ request.form.get('email', '') }}" maxlength="120" autocomplete="username" required autofocus>
+        </label>
+        <label for="senha">Senha
+            <input id="senha" type="password" name="senha" autocomplete="current-password" required>
+        </label>
+        <button type="submit">Entrar</button>
+    </form>
+</section>
+{% endblock %}

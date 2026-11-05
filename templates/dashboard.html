@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Início | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<h1>Painel principal</h1>
+<p class="muted">Bem-vindo(a), {{ nome_usuario }}.</p>
+<div class="cards">
+    <a class="panel card" href="{{ url_for('listar_tutores') }}">
+        <h2>Tutores</h2>
+        <strong>{{ contagens.tutores }}</strong>
+        <span>Consultar e cadastrar tutores</span>
+    </a>
+    <a class="panel card" href="{{ url_for('listar_pets') }}">
+        <h2>Pets</h2>
+        <strong>{{ contagens.pets }}</strong>
+        <span>Consultar e cadastrar pets</span>
+    </a>
+    <a class="panel card" href="{{ url_for('listar_agendamentos') }}">
+        <h2>Agendamentos</h2>
+        <strong>{{ contagens.agendamentos }}</strong>
+        <span>Consultar e agendar atendimentos</span>
+    </a>
+</div>
+{% endblock %}

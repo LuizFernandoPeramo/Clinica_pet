@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}{{ titulo }} | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<section class="panel narrow">
+    <h1>{{ titulo }}</h1>
+    <p class="muted">{{ mensagem }}</p>
+    <a class="btn" href="{{ url_for('inicio') if session.get('id_usuario') else url_for('login') }}">Voltar ao início</a>
+</section>
+{% endblock %}

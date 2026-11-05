@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Editar' if antigo else 'Novo' }} agendamento | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<section class="panel narrow">
+    <h1>{{ 'Editar' if antigo else 'Novo' }} agendamento</h1>
+    <form method="post">
+        {% set tutor_atual = request.form.get('tutor_id', (antigo.tutor_id|string) if antigo else '') %}
+        {% set pet_atual = request.form.get('pet_id', (antigo.pet_id|string) if antigo else '') %}
+
+        <label for="tutor_id">Tutor
+            <select id="tutor_id" name="tutor_id" required>
+                <option value="">Selecione...</option>
+                {% for t in tutores %}
+                    <option value="{{ t.id }}" {% if tutor_atual == (t.id|string) %}selected{% endif %}>{{ t.nome }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label for="pet_id">Pet
+            <select id="pet_id" name="pet_id" required>
+                <option value="">Selecione...</option>
+                {% for p in pets %}
+                    <option value="{{ p.id }}" data-tutor-id="{{ p.id_tutor }}" {% if pet_atual == (p.id|string) %}selected{% endif %}>{{ p.nome }} ({{ p.tutor }})</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label for="objetivo">Objetivo
+            <input id="objetivo" type="text" name="objetivo" value="{{ request.form.get('objetivo', antigo.objetivo if antigo else '') }}" maxlength="100" required>
+        </label>
+
+        <div class="form-row">
+            <label for="data">Data
+                <input id="data" type="date" name="data" value="{{ request.form.get('data', antigo.data if antigo else '') }}" required>
+            </label>
+
+            <label for="horario">Horário
+                <input id="horario" type="time" name="horario" value="{{ request.form.get('horario', antigo.horario if antigo else '') }}" required>
+            </label>
+        </div>
+
+        <label for="observacao">Observação
+            <textarea id="observacao" name="observacao" rows="4">{{ request.form.get('observacao', antigo.observacao or '' if antigo else '') }}</textarea>
+        </label>
+
+        <div class="form-actions">
+            <button type="submit">Salvar</button>
+            <a href="{{ url_for('listar_agendamentos') }}" class="btn secondary">Cancelar</a>
+        </div>
+    </form>
+</section>
+<script>
+(function () {
+    const tutorSelect = document.getElementById('tutor_id');
+    const petSelect = document.getElementById('pet_id');
+    if (!tutorSelect || !petSelect) return;
+
+    function filtrarPets() {
+        const tutorId = tutorSelect.value;
+        for (const opt of petSelect.options) {
+            if (!opt.value) continue;
+            const compativel = !tutorId || opt.dataset.tutorId === tutorId;
+            opt.hidden = !compativel;
+            opt.disabled = !compativel;
+            if (!compativel && opt.selected) {
+                petSelect.value = '';
+            }
+        }
+    }
+
+    tutorSelect.addEventListener('change', filtrarPets);
+    filtrarPets();
+})();
+</script>
+{% endblock %}

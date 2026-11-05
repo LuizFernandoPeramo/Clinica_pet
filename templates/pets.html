@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Pets | {{ config.NOME_SISTEMA }}{% endblock %}
+{% block content %}
+<div class="heading">
+    <h1>Pets</h1>
+    <a class="btn" href="{{ url_for('salvar_pet') }}">Novo pet</a>
+</div>
+<form class="filter" method="get">
+    <label for="busca">Buscar por nome
+        <input id="busca" type="search" name="q" value="{{ q }}" placeholder="Nome do pet">
+    </label>
+    <button type="submit">Buscar</button>
+    <a class="btn secondary" href="{{ url_for('listar_pets') }}">Limpar</a>
+</form>
+<div class="scroll">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Tutor</th>
+                <th>Espécie</th>
+                <th>Raça</th>
+                <th>Peso</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in rows %}
+            <tr>
+                <td>{{ a.id }}</td>
+                <td>{{ a.nome }}</td>
+                <td>{{ a.tutor }}</td>
+                <td>{{ a.especie }}</td>
+                <td>{{ a.raca }}</td>
+                <td>{{ a.peso }}</td>
+                <td class="actions">
+                    <a href="{{ url_for('salvar_pet', pet_id=a.id) }}">Editar</a>
+                    <form class="inline" method="post" action="{{ url_for('excluir_pet', pet_id=a.id) }}" onsubmit="return confirm('Excluir este pet?')">
+                        <button type="submit" class="link-danger">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td class="empty" colspan="7">Nenhum pet encontrado.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
